@@ -22,6 +22,14 @@ public class Clock {
             throw new Exception("Value must be not negative!");
     }
 
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public void setCost(Integer cost) {
+        this.cost = cost;
+    }
+
     public void setHours(Integer hours) throws Exception {
         try {
             checkValue(hours);
@@ -115,6 +123,4 @@ public class Clock {
             System.out.println("\tAdvanced Time: " + this.hours + "h. " + this.minutes + "m. " + this.seconds + "s. ");
         }
     }
-
-
 }
