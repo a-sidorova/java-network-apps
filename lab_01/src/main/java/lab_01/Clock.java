@@ -4,11 +4,11 @@ import java.io.IOException;
 
 public class Clock {
     protected String type;
-    protected String brand;
-    protected Integer cost;
-    protected Integer hours, minutes;
+    private String brand;
+    private int cost;
+    protected int hours, minutes;
 
-    public Clock(String brand, Integer cost, Integer hours, Integer minutes) throws Exception {
+    public Clock(String brand, int cost, int hours, int minutes) throws Exception {
         this.type = "Common";
         this.brand = brand;
         this.cost = cost;
@@ -17,7 +17,7 @@ public class Clock {
         setMinutes(minutes);
     }
 
-    protected void checkValue(Integer value) throws Exception {
+    protected void checkValue(int value) throws Exception {
         if (value < 0)
             throw new Exception("Value must be not negative!");
     }
@@ -26,11 +26,12 @@ public class Clock {
         this.brand = brand;
     }
 
-    public void setCost(Integer cost) {
+    public void setCost(int cost) throws Exception {
+        checkValue(cost);
         this.cost = cost;
     }
 
-    public void setHours(Integer hours) throws Exception {
+    public void setHours(int hours) throws Exception {
         try {
             checkValue(hours);
             this.hours = hours % 24;
@@ -39,7 +40,7 @@ public class Clock {
         }
     }
 
-    public void setMinutes(Integer minutes) throws Exception {
+    public void setMinutes(int minutes) throws Exception {
         try {
             checkValue(minutes);
             setHours(this.hours + minutes / 60);
@@ -49,11 +50,11 @@ public class Clock {
         }
     }
 
-    public Integer getHours() {
+    public int getHours() {
         return this.hours;
     }
 
-    public Integer getMinutes() {
+    public int getMinutes() {
         return this.minutes;
     }
 
@@ -61,11 +62,11 @@ public class Clock {
         return this.brand;
     }
 
-    public Integer getCost() {
+    public int getCost() {
         return this.cost;
     }
 
-    public void increaseTime(Integer value) throws Exception {
+    public void increaseTime(int value) throws Exception {
         try {
             checkValue(value);
             setMinutes((this.minutes + value));
@@ -85,16 +86,16 @@ public class Clock {
 
 
     public static class AdvancedClock extends Clock {
-        private Integer seconds;
+        private int seconds;
 
-        public AdvancedClock(String brand, Integer cost, Integer hours, Integer minutes, Integer seconds) throws Exception {
+        public AdvancedClock(String brand, int cost, int hours, int minutes, int seconds) throws Exception {
             super(brand, cost, hours, minutes);
 
             this.type = "Advanced";
             setSeconds(seconds);
         }
 
-        public void setSeconds(Integer seconds) throws Exception {
+        public void setSeconds(int seconds) throws Exception {
             try {
                 checkValue(seconds);
                 setMinutes(this.minutes + seconds / 60);
@@ -104,12 +105,12 @@ public class Clock {
             }
         }
 
-        public Integer getSeconds() {
+        public int getSeconds() {
             return this.seconds;
         }
 
         @Override
-        public void increaseTime(Integer value) throws Exception {
+        public void increaseTime(int value) throws Exception {
             try {
                 checkValue(value);
                 setSeconds((this.seconds + value));
