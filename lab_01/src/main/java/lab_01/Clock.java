@@ -1,127 +1,151 @@
 package lab_01;
 
-import java.io.IOException;
+import java.util.ArrayList;
 
-public class Clock {
-    protected String type;
-    private String brand;
-    private int cost;
-    protected int hours, minutes;
+public class Clock implements IClock {
+    int hours = 0;
+    int minutes = 0;
+    int cost = 0;
+    String type = "Common";
+    String brand = "Classic";
+    Thread t;
+    int step = 60000;
+    boolean flag = false;
+    ArrayList<IAlarm> alarms;
 
-    public Clock(String brand, int cost, int hours, int minutes) throws Exception {
-        this.type = "Common";
-        this.brand = brand;
-        this.cost = cost;
-
-        setHours(hours);
-        setMinutes(minutes);
+    public Clock() {
+        alarms = new ArrayList<IAlarm>();
     }
 
-    protected void checkValue(int value) throws Exception {
+    protected void checkValue(int value) {
         if (value < 0)
-            throw new Exception("Value must be not negative!");
+            throw new IllegalArgumentException("Value must be not negative!");
     }
 
+    @Override
     public void setBrand(String brand) {
         this.brand = brand;
     }
 
-    public void setCost(int cost) throws Exception {
+    @Override
+    public void setCost(int cost) {
         checkValue(cost);
         this.cost = cost;
     }
 
-    public void setHours(int hours) throws Exception {
+    @Override
+    public void setHours(int hours) {
         try {
             checkValue(hours);
             this.hours = hours % 24;
-        } catch (IOException e) {
+        } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void setMinutes(int minutes) throws Exception {
+    @Override
+    public void setMinutes(int minutes) {
         try {
             checkValue(minutes);
             setHours(this.hours + minutes / 60);
             this.minutes = minutes % 60;
-        } catch (IOException e) {
+        } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
     }
 
+    @Override
+    public void setSeconds(int seconds) {
+        throw new IllegalArgumentException("Seconds are not supported!");
+    }
+
+    @Override
     public int getHours() {
         return this.hours;
     }
 
+    @Override
     public int getMinutes() {
         return this.minutes;
     }
 
+    @Override
+    public int getSeconds() {
+        throw new IllegalArgumentException("Seconds are not supported!");
+    }
+
+    @Override
     public String getBrand() {
         return this.brand;
     }
 
+    @Override
     public int getCost() {
         return this.cost;
     }
 
-    public void increaseTime(int value) throws Exception {
+    public void increaseTime(int value) {
         try {
             checkValue(value);
-            setMinutes((this.minutes + value));
-        } catch (IOException e) {
+            setMinutes(this.minutes + value);
+        } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
     }
 
+    @Override
+    public void start() throws InterruptedException {
+        if (t == null) {
+            t = new Thread() {
+                @Override
+                public void run() {
+                    flag = true;
+                    System.out.println("Clock is starting!");
+
+                    while (flag) {
+                        try {
+                            increaseTime(1);
+                            Thread.sleep(step);
+                            checkAlarms();
+                        } catch (InterruptedException e) {
+                            flag = false;
+                        }
+                    }
+                }
+            };
+
+        }
+
+        t.start();
+    }
+
+    @Override
+    public void stop() {
+        if (t != null) {
+            t.interrupt();
+            t = null;
+            System.out.println("Clock is ending!");
+        }
+    }
+
+    private void checkAlarms() {
+        for (IAlarm alarm : this.alarms) {
+            alarm.check(this);
+        }
+    }
+
+    @Override
+    public void addAlarm(IAlarm alarm) {
+        this.alarms.add(alarm);
+    }
+
+    @Override
     public void printInformation() {
-        System.out.println("\tClock type: " + this.type + "\n\tBrand: " + this.brand +"\n\tCost: " + this.cost);
+        System.out.println("\tClock type: " + type + "\n\tBrand: " + this.brand +"\n\tCost: " + this.cost);
         printTime();
     }
 
-    public void printTime() {
+    protected void printTime() {
         System.out.println("\tTime: " + this.hours + "h. " + this.minutes + "m.");
-    }
-
-
-    public static class AdvancedClock extends Clock {
-        private int seconds;
-
-        public AdvancedClock(String brand, int cost, int hours, int minutes, int seconds) throws Exception {
-            super(brand, cost, hours, minutes);
-
-            this.type = "Advanced";
-            setSeconds(seconds);
-        }
-
-        public void setSeconds(int seconds) throws Exception {
-            try {
-                checkValue(seconds);
-                setMinutes(this.minutes + seconds / 60);
-                this.seconds = seconds % 60;
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        public int getSeconds() {
-            return this.seconds;
-        }
-
-        @Override
-        public void increaseTime(int value) throws Exception {
-            try {
-                checkValue(value);
-                setSeconds((this.seconds + value));
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        @Override
-        public void printTime() {
-            System.out.println("\tAdvanced Time: " + this.hours + "h. " + this.minutes + "m. " + this.seconds + "s. ");
-        }
     }
 }
