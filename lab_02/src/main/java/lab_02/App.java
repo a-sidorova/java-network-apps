@@ -71,6 +71,11 @@ public class App extends Application {
         TextField secTextField = new TextField();
         grid.add(secTextField, 1, 3);
 
+        Label clockLbl = new Label("Time:");
+        grid.add(clockLbl, 0, 5);
+        time = new Label("");
+        grid.add(time, 1, 5);
+
         Button btn = new Button("Set time");
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_LEFT);
@@ -126,11 +131,6 @@ public class App extends Application {
                     Label timeAlarm = new Label(alarm.printTime());
                     grid.add(timeAlarm, 1, 5 + alarmCount);
                 }
-
-                Label clock = new Label("Time:");
-                grid.add(clock, 0, 5);
-                time = new Label("");
-                grid.add(time, 1, 5);
             }
         });
 
@@ -197,12 +197,13 @@ public class App extends Application {
                 stopBtn.setDisable(true);
                 startBtn.setDisable(true);
 
-                for (int i = 5 + alarmCount; i >= 5; i--)
+                for (int i = 5 + alarmCount; i > 5; i--)
                     deleteRow(i);
 
                 alarmCount = 0;
                 isTime = false;
                 scenetitle.setText("SetClock");
+                time.setText("");
             }
         });
 
