@@ -33,8 +33,7 @@ public class Clock implements IClock {
         this.cost = cost;
     }
 
-    @Override
-    public void setHours(int hours) {
+    public void setHours(int hours) throws Exception {
         try {
             checkValue(hours);
             this.hours = hours % 24;
@@ -85,7 +84,7 @@ public class Clock implements IClock {
     }
 
     public void increaseTime(int value) {
-        try {
+    try {
             checkValue(value);
             setMinutes(this.minutes + value);
         } catch (IllegalArgumentException e) {
