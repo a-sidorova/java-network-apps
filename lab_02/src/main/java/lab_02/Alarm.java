@@ -51,15 +51,12 @@ public class Alarm implements IAlarm {
     }
 
     @Override
-    public void check(IClock clock) {
-        if (this.hours == clock.getHours() && this.minutes == clock.getMinutes()) {
-            System.out.println("!!!ALARM!!!");
-            clock.printInformation();
-        }
+    public boolean check(IClock clock) {
+        return (this.hours == clock.getHours() && this.minutes == clock.getMinutes());
     }
 
     @Override
-    public void printTime() {
-        System.out.println("\tAlarm: " + this.hours + "h. " + this.minutes + "m.");
+    public String printTime() {
+        return new String(this.hours + "h. " + this.minutes + "m.");
     }
 }

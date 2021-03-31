@@ -9,6 +9,6 @@ public interface IAlarm {
     int getMinutes();
     int getSeconds();
 
-    void check(IClock clock);
-    void printTime();
+    boolean check(IClock clock);
+    String printTime();
 }

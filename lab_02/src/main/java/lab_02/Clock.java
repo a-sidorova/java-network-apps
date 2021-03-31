@@ -1,6 +1,7 @@
 package lab_02;
 
 import java.util.ArrayList;
+import java.util.EventObject;
 
 public class Clock implements IClock {
     int hours = 0;
@@ -88,6 +89,12 @@ public class Clock implements IClock {
         return this.cost;
     }
 
+    @Override
+    public int getStep() {
+        return this.step;
+    }
+
+    @Override
     public void increaseTime(int value) {
         try {
             checkValue(value);
@@ -132,10 +139,14 @@ public class Clock implements IClock {
         }
     }
 
-    private void checkAlarms() {
+    @Override
+    public boolean checkAlarms() {
+        boolean check = false;
         for (IAlarm alarm : this.alarms) {
-            alarm.check(this);
+            check |= alarm.check(this);
         }
+
+        return check;
     }
 
     @Override
@@ -143,13 +154,7 @@ public class Clock implements IClock {
         this.alarms.add(alarm);
     }
 
-    @Override
-    public void printInformation() {
-        System.out.println("\tClock type: " + type + "\n\tBrand: " + this.brand +"\n\tCost: " + this.cost);
-        printTime();
-    }
-
-    protected void printTime() {
-        System.out.println("\tTime: " + this.hours + "h. " + this.minutes + "m.");
+    public String printTime() {
+        return new String(this.hours + "h. " + this.minutes + "m.");
     }
 }

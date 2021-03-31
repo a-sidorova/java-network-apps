@@ -20,17 +20,12 @@ public class AlarmAdvanced extends Alarm {
     }
 
     @Override
-    public void check(IClock clock) {
-       // System.out.println("this: " + this.hours + " " + this.minutes + " " + this.seconds + "\n" + "clock: " + clock.getHours() + " " + clock.getMinutes() + " " + clock.getSeconds());
-
-        if (this.hours == clock.getHours() && this.minutes == clock.getMinutes() && this.seconds == clock.getSeconds()) {
-            System.out.println("!!!ALARM!!!");
-            clock.printInformation();
-        }
+    public boolean check(IClock clock) {
+        return (this.hours == clock.getHours() && this.minutes == clock.getMinutes() && this.seconds == clock.getSeconds());
     }
 
     @Override
-    public void printTime() {
-        System.out.println("\tAlarm: " + this.hours + "h. " + this.minutes + "m. " + this.seconds + "s.");
+    public String printTime() {
+        return new String(this.hours + "h. " + this.minutes + "m." + this.seconds + "s.");
     }
 }

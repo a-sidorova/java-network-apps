@@ -37,7 +37,7 @@ public class ClockAdvanced extends Clock {
     }
 
     @Override
-    protected void printTime() {
-        System.out.println("\tAdvanced Time: " + this.hours + "h. " + this.minutes + "m. " + this.seconds + "s. ");
+    public String printTime() {
+        return new String(this.hours + "h. " + this.minutes + "m. " + this.seconds + "s. ");
     }
 }

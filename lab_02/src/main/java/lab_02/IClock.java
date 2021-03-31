@@ -5,6 +5,7 @@ public interface IClock {
     int getMinutes();
     int getSeconds();
     int getCost();
+    int getStep();
     String getBrand();
 
     void setHours(int hours);
@@ -15,6 +16,9 @@ public interface IClock {
 
     void start() throws InterruptedException;
     void stop();
+
+    void increaseTime(int value);
     void addAlarm(IAlarm alarm);
-    void printInformation();
+    boolean checkAlarms();
+    String printTime();
 }
