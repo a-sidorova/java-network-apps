@@ -171,15 +171,14 @@ public class App extends Application {
             public void handle(ActionEvent e) {
                 if (isPause) {
                     pauseBtn.setText("Resume");
-                    threadFlag = false;
                     isPause = false;
                 } else {
                     pauseBtn.setText("Pause");
-                    threadFlag = true;
                     isPause = true;
 
-                    stop();
-                    start();
+                    synchronized (t) {
+                        t.notify();
+                    }
                 }
 
                 pauseBtn.setDisable(false);
@@ -221,6 +220,16 @@ public class App extends Application {
                     System.out.println("Clock is starting!");
 
                     while (threadFlag) {
+                        if (!isPause) {
+                            synchronized (t) {
+                                try {
+                                    t.wait();
+                                } catch (InterruptedException ee) {
+                                    ee.printStackTrace();
+                                }
+                            }
+                        }
+
                         try {
                             Platform.runLater(new Runnable() {
                                 @Override public void run() {
